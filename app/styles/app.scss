@@ -1,0 +1,257 @@
+@import "jquery-ui/themes/base/jquery-ui.min";
+
+* {
+    font-family: 'Exo', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    background: #0F1830;
+    overflow: hidden;
+}
+.robot-canvas {
+    background: #0F1830;
+}
+.control-panel {
+    position: absolute;
+    bottom: 0;
+    height: 200px;
+    width: 100%;
+    z-index: 10;
+    transition: height .25s linear;
+}
+.control-panel .panel-wrap {
+    position: relative;
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    background: #202024;
+    box-shadow: 0 0 5px #00C4FF;
+    border-bottom: 0;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    color: #E6E7E8;
+    max-width: 800px;
+}
+
+@media screen and (max-width: 800px) {
+    .control-panel .panel-wrap {
+        border-radius: 0;
+    }
+}
+
+.control-panel.short {
+    height: 40px;
+}
+
+.control-panel .panel-header {
+    height: 40px;
+    box-shadow: 0 5px 5px -5px #00C4FF;
+    font-size: 20px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.control-panel .panel-toggle {
+    background: #202024;
+    margin: 10px;
+    height: 20px;
+    width: 20px;
+    border: 0;
+    outline: 0;
+    border-radius: 2px;
+    padding: 0;
+}
+
+.control-panel .panel-toggle > i {
+    color: #00C4FF;
+    font-size: 22px;
+    text-align: center;
+}
+
+.control-panel .panel-slider {
+    height: 160px;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+.control-panel .panel-slider > div {
+    height: 100%;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.control-panel .list-panel table {
+    margin: 0;
+    width: 100%;
+}
+
+.control-panel .list-panel tr {
+    padding-bottom: 5px;
+    font-size: 14px;
+}
+
+.control-panel .list-panel tr:hover td {
+    color: #00C4FF;
+}
+
+.control-panel .single-panel {
+    font-size: 16px;
+}
+
+.dials, .bars {
+    height: 100%;
+    padding: 0;
+}
+
+.dials > div {
+    width: 100%;
+    margin: 0;
+    height: 50%;
+    padding-top: 4px;
+}
+
+.bars > div{
+    margin: 0;
+    width: 100%;
+    height: 25%;
+    padding: 0 15px;
+}
+
+.task select {
+    background-color: #202024;
+    border-color: #00C4FF;
+    outline: none;
+    width: 100%;
+}
+
+.battery .progress {
+    border: 1px solid #00C4FF;
+    height: 50px;
+    background-color: #202024;
+    width: 90%;
+    margin: 0;
+    padding: 1px;
+    display: inline-block;
+    overflow: visible;
+}
+
+.battery .progress .battery-bump {
+    float: right;
+    background-color: #00C4FF;
+    margin-top: 14px;
+    margin-right: -8px;
+    height: 16px;
+    width: 5px;
+    border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+}
+
+.battery .progress-bar {
+    background-color: #00C4FF;
+    padding-top: 2px;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.flux {
+    height: 100%;
+}
+
+.flux .flux-slider-wrap {
+    margin-top: 10px;
+    background-color: #202024;
+    border: 1px solid #00C4FF;
+    height: 20px;
+    border-radius: 4px;
+    padding-right: 22px;
+}
+
+.flux .flux-slider {
+    background-color: #202024;
+    border: 0;
+}
+
+.flux .flux-slider .ui-slider-handle {
+    outline: none;
+    border: 0;
+    background-color: #00C4FF;
+    height: 16px;
+    width: 20px;
+    top: 0;
+    border-radius: 2px;
+    margin-left: 1px;
+    margin-top: 1px;
+}
+
+.risk .progress {
+    height: 20px;
+    width: 90%;
+    margin-top: 10px;
+    border: 1px solid #00C4FF;
+    background-color: #202024;
+    padding: 1px;
+}
+
+.risk .progress-bar {
+    background-color: #00C4FF;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+}
+
+.bars .progress {
+    border: 1px solid #00C4FF;
+    background-color: #202024;
+    padding: 1px;
+}
+
+.bars .progress-bar {
+    background-color: #00C4FF;
+}
+
+.bars .progress-bar:first-child {
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-right: 1px solid #202024;
+    color: rgba(230,231,232,0);
+    transition: width .3s linear, background-color .3s linear, color 0s linear 0s, border-radius 0s linear 0s;
+}
+
+.bars .progress-bar:first-child div {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+}
+
+.bars .progress .progress-bar:not(:first-child) {
+    transition: width 0s linear;
+    transition-delay: .3s;
+}
+
+.bars .progress:hover .progress-bar:first-child {
+    transition: width .3s linear, background-color .3s linear, color 0s linear .3s, border-radius 0s linear .3s;
+    border-radius: 2px;
+    width: 100% !important;
+    background-color: rgba(0,196,255,0);
+    color: rgba(230,231,232,1);
+}
+
+.bars .progress:hover .progress-bar:not(:first-child) {
+    background-color: #202024;
+    width: 0 !important;
+    transition: 0s;
+    transition-delay: 0s;
+}
+
+.bars .progress i {
+    font-size: 12px;
+    font-style: normal;
+    display: table-cell;
+    text-align: center;
+}
+
+.bars .progress i.fa {
+    padding-top: 1px;
+    font-size: 15px;
+}

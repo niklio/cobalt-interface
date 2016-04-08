@@ -1,0 +1,85 @@
+<div class="single-panel">
+    <div class="dials col-xs-8">
+        <div class="row">
+            <div class="task col-xs-6">
+                <select id='task-select'>
+                    <option value='observing'>Observing</option>
+                    <option value="reporting">Reporting</option>
+                    <option value='becoming_skynet'>Becoming Skynet</option>
+                </select>
+            </div>
+            <div class="battery col-xs-6">
+                <div class="progress">
+                    <div id="battery-bar" class="progress-bar"></div>
+                    <div class='battery-bump'></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="flux col-xs-6">
+                Capacitor
+                <span class='hidden-xs'>
+                Charge: {{ selectedRobot.flux_capacitor_charge | number:2 }}
+                </span>
+                <div class='flux-slider-wrap'>
+                    <div id="flux-slider" class='flux-slider'></div>
+                </div>
+            </div>
+            <div class="risk col-xs-6">
+                Risk
+                <span class='hidden-xs'>
+                Level: {{ selectedRobot.risk_level | number:1 }}
+                </span>
+                <div class='progress'>
+                    <div id="risk-bar" class="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bars col-xs-4">
+        <div class="row">
+            <div class="progress">
+                <div id="cell-strength-bar" class="progress-bar">
+                    <div>
+                        <i class='fa fa-signal'></i>
+                        <i class='fa fa-wifi'></i>
+                    </div>
+                </div>
+                <div id="wifi-strength-bar" class="progress-bar"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="progress" style="padding-bottom: .5px;">
+                <div id="cpu-load-bar" class="progress-bar">
+                    <div>
+                        <i><span class='hidden-xs'>CPU </span>Load</i>
+                        <i><span class='hidden-xs'>CPU </span>Temp</i>
+                    </div>
+                </div>
+                <div id="cpu-temp-bar" class="progress-bar"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="progress">
+                <div id="gpu-temp-bar" class="progress-bar">
+                    <div>
+                        <i><span class='hidden-xs'>GPU </span>Load</i>
+                        <i><span class='hidden-xs'>GPU </span>Temp</i>
+                    </div>
+                </div>
+                <div id="gpu-load-bar" class="progress-bar"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="progress" style="padding-bottom: .5px;">
+                <div id="ram-bar" class="progress-bar">
+                    <div>
+                        <i>RAM</i>
+                        <i>Motor<span class='hidden-xs'> Temp</span></i>
+                    </div>
+                </div>
+                <div id="motor-temp-bar" class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+<div class="list-panel">
+<table st-table="selectedRobots" class="list-panel">
+    <thead>
+        <th>Task</th>
+        <th>Battery</th>
+        <th>Risk Level</th>
+    </thead>
+    <tbody>
+        <tr ng-repeat="robot in selectedRobots" ng-click="selectRobot(robot)">
+            <td>{{ robot.task }}</td>
+            <td>{{ robot.battery | number:1 }}</td>
+            <td>{{ robot.risk_level | number:1 }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>

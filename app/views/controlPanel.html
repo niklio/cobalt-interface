@@ -1,0 +1,12 @@
+<div class="control-panel" ng-class="{'short': isPanelVisible == false}">
+    <div class='panel-wrap'>
+        <div ng-click="togglePanel()" class='panel-header'>
+            <button type="button" class='panel-toggle'>
+                <i class='fa fa-angle-down' ng-class="{'hidden': isPanelVisible == false}"></i>
+                <i class='fa fa-angle-up' ng-class="{'hidden': isPanelVisible}"></i>
+            </button>
+            <b>Console</b>
+        </div>
+        <div class='panel-slider' ng-transclude></div>
+    </div>
+</div>
