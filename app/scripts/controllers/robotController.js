@@ -14,21 +14,28 @@ module.exports = function ($scope, $rootScope, $q, robotService) {
     };
 
     this.selectRobots = function(robot) {
-        return robotService.setSelectedRobots(robots);
+        robotService.setSelectedRobots(robots);
     }
     this.selectRobotsByLocation = function (x_cord, y_cord) {
-        return robotService.selectRobotsByLocation(x_cord, y_cord);
+        var distance_threshhold = (arguments[2]) ? arguments[2]: 0;
+        robotService.selectRobotsByLocation(x_cord, y_cord, distance_threshhold);
     };
     this.selectAllRobots = function () {
-        return robotService.selectAllRobots();
+        robotService.selectAllRobots();
     };
 
+    this.updateSelectedRobot = function (update) {
+        if (!$scope.selectedRobot) {
+            return;
+        }
+        robotService.updateRobotByIndex($scope.selectedRobot['key'], update);
+    };
+
+    $scope.selectedRobot = null;
     $scope.selectedRobots = [];
     $rootScope.$on('update-selected-robots', function () {
         robotService.getSelectedRobots().then(function (res) {
-            if (res.length == 1) {
-                $scope.selectedRobot = res[0]
-            }
+            $scope.selectedRobot = res.length == 1 ? res[0] : null
             $scope.selectedRobots = res;
         }, function (reason) {
             console.log(reason);

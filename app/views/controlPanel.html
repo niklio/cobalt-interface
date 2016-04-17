@@ -1,4 +1,4 @@
-<div class="control-panel" ng-class="{'short': isPanelVisible == false}">
+<div class="control-panel" ng-class="isPanelVisible == true ? 'tall' : 'short'">
     <div class='panel-wrap'>
         <div ng-click="togglePanel()" class='panel-header'>
             <button type="button" class='panel-toggle'>

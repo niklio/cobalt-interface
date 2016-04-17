@@ -87,10 +87,14 @@ def robot_api():
     # update data on robot
     if request.method == 'POST':
         print "posting"
+
+        # Changed this to make it play nicely with angular.
+        # Maybe theres a way to set request.form, but I dont know it.
+        request_data = request.get_json()
         try:
-            robot_id = request.form["robot_id"]
-            goal_x = float(request.form["goal_x"])
-            goal_y = float(request.form["goal_y"])
+            robot_id = request_data["robot_id"]
+            goal_x = float(request_data["goal_x"])
+            goal_y = float(request_data["goal_y"])
         except:
             return Response("ERROR: did not find robot_id, goal_x, or goal_y in POST")
 

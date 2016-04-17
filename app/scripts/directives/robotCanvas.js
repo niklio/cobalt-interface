@@ -9,124 +9,174 @@ module.exports = function () {
 
             var ctx = element[0].getContext("2d");
 
-            var canvas_offset_x = function () {
-                return center["x"] * ctx.canvas.width / deviation / 2;
-            }
-            var canvas_offset_y = function () {
-                return center["y"] * ctx.canvas.height / deviation / 2;
-            }
+            var Robot = function (robot_data) {
+                this.data = robot_data;
 
-            const deviation_scale_factor = 2;
-            var deviation = 0;
-            var center = {
-                "x": 0,
-                "y": 0,
-            }
+                this.only_bot_selected = function () {
+                    return (scope.selectedRobot) ? scope.selectedRobot['key'] == robot_data['key'] : false;
+                };
 
-            var robots = {
-                circle_rad: 10,
-                circles: [],
-                empty: function() {
-                    this.circles = [];
-                },
-                draw: function(robot) {
-                    x = robot["x"] * (ctx.canvas.width / 2) / deviation / deviation_scale_factor;
-                    y = robot["y"] * (ctx.canvas.height / 2) / deviation / deviation_scale_factor;
+                this.hasnt_reached_goal = function () {
+                    return this.data['x'] != this.data['goal_x'] || this.data['y'] != this.data['goal_y'];
+                }
+
+                this.draw_bot = function (x, y) {
+                    // Outer ring
+                    if (this.only_bot_selected()) {
+                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = "#E6E7E8";
+                        ctx.fillStyle = "#E6E7E8";
+
+                        ctx.beginPath();
+                        ctx.arc(x, y, 1.5, 0, 2*Math.PI);
+                        ctx.stroke();
+                        ctx.fill();
+                    }
 
                     ctx.lineWidth = 1;
                     ctx.strokeStyle = "#00C4FF";
                     ctx.fillStyle = "#00C4FF";
 
                     ctx.beginPath();
-                    ctx.arc(x, y, this.circle_rad, 0, 2*Math.PI);
+                    ctx.arc(x, y, 1, 0, 2*Math.PI);
+                    ctx.stroke();
+                    ctx.fill();
+                };
+
+                this.draw_goal = function (x, y) {
+                    ctx.lineWidth = .5;
+                    ctx.strokeStyle = "#E6E7E8";
+                    ctx.fillStyle = "#E6E7E8";
+
+                    ctx.beginPath();
+                    ctx.arc(x, y, .5, 0, 2*Math.PI);
                     ctx.stroke();
                     ctx.fill();
 
-                    circle_center = {
-                        "x_cord": robot["x"],
-                        "y_cord": robot["y"],
-                        "x": x,
-                        "y": y,
-                    }
-                    this.circles.push(circle_center);
-                    return circle_center;
-                },
+                    // Line to goal
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(this.data['x'], this.data['y']);
+                    ctx.stroke();
+                };
 
+
+                if (this.only_bot_selected() && this.hasnt_reached_goal()) {
+                    this.draw_goal(this.data['goal_x'], this.data['goal_y'])
+                }
+                this.draw_bot(this.data["x"], this.data["y"]);
             }
 
-            function fit_canvas_to_document() {
-                var doc_width = $(window).width();
-                var doc_height = $(window).height();
+            // Zoom factor
+            var canvas_zoom_x = 8;
+            var canvas_zoom_y = 8;
 
-                ctx.canvas.width = doc_width;
-                ctx.canvas.height = doc_height;
+            // Center of screen offset in pixels
+            var canvas_offset_x = 0;
+            var canvas_offset_y = 0;
 
-                ctx.translate(canvas_offset_x(), canvas_offset_y());
-            }
+            // Absolute value of respective offsets must not exceed
+            var canvas_bound_x = 0;
+            var canvas_bound_y = 0;
 
-            function draw_robot_canvas() {
-                controller.getRobots()
-                .then(function (res) {
+            // Parent container size
+            var parent_width = element.parent().width();
+            var parent_height = element.parent().height();
 
-                    // Calculate center of canvas
-                    for (var i = 0; i < res.length; i++) {
-                        center["x"] = (center["x"] * i + res[i]["x"]) / (i + 1);
-                        center["y"] = (center["y"] * i + res[i]["y"]) / (i + 1);
-                    }
 
-                    for (var k = 0; k < res.length; k++) {
-                        x_deviation = center["x"] - res[k]["x"];
-                        y_deviation = center["y"] - res[k]["y"];
-                        new_deviation = Math.sqrt(Math.pow(x_deviation, 2) + Math.pow(y_deviation, 2));
-                        if (new_deviation > deviation) {
-                            deviation = new_deviation;
-                        }
-                    }
+            var draw_robots = function (robots_data) {
+                for (var j = 0; j < robots_data.length; j++) {
+                    var robot_data = robots_data[j];
+                    canvas_bound_x = Math.max(
+                                        canvas_bound_x,
+                                        Math.abs(robot_data['x']) * canvas_zoom_x,
+                                        Math.abs(robot_data['goal_x']) * canvas_zoom_x);
+                    canvas_bound_y = Math.max(
+                                        canvas_bound_y,
+                                        Math.abs(robot_data['x']) * canvas_zoom_y,
+                                        Math.abs(robot_data['goal_y']) * canvas_zoom_y);
 
-                    fit_canvas_to_document();
-
-                    for (var j = 0; j < res.length; j++) {
-                        robots.draw(res[j]);
-                    }
-
-                }, function (reason) {
-                    alert("Error getting robots")
-                });
+                    new Robot(robot_data);
+                }
             };
 
-            element.on('mouseup', function(event) {
-                click_x = event.clientX - canvas_offset_x();
-                click_y = event.clientY - canvas_offset_y();
+            var draw_canvas = function () {
+                parent_width = element.parent().width();
+                parent_height = element.parent().height();
 
-                clicked = [];
-                for (var i = 0; i < robots.circles.length; i++) {
-                    robot_circle = robots.circles[i]
+                ctx.canvas.width = parent_width;
+                ctx.canvas.height = parent_height;
 
-                    x = robot_circle["x"];
-                    y = robot_circle["y"];
+                ctx.transform(canvas_zoom_x, 0, 0, canvas_zoom_y, parent_width / 2 + canvas_offset_x, parent_height / 2 + canvas_offset_y);
+                controller.getRobots().then(draw_robots)
+            };
 
-                    distance = Math.sqrt(Math.pow(click_x - x, 2) + Math.pow(click_y - y, 2));
-                    if (distance <= robots.circle_rad) {
-                        clicked.push(robot_circle);
-                    }
-                }
-                if (!clicked.length) {
-                    controller.selectAllRobots();
-                    return;
-                }
-                for (var k = 0; k < clicked.length; k++) {
 
-                    x_cord = clicked[k]["x_cord"];
-                    y_cord = clicked[k]["y_cord"];
+            var clickX = clickY = 0;
 
-                    controller.selectRobotsByLocation(x_cord, y_cord);
+            $(window).on('mousemove', function (e) {
+                clickX = (e.clientX - parent_width / 2 - canvas_offset_x) / canvas_zoom_x;
+                clickY = (e.clientY - parent_height / 2 - canvas_offset_y) / canvas_zoom_y;
+            });
+
+            element.on('mousedown', function (e) {
+                switch (e.which) {
+                    case 1:
+                        controller.selectRobotsByLocation(clickX, clickY, 1);
+                        break;
+                    case 3:
+                        e.preventDefault();
+                        e.stopPropagation();
+                        controller.updateSelectedRobot({
+                            "goal_x": clickX,
+                            "goal_y": clickY
+                        });
+
+                        draw_canvas();
+                        break;
                 }
             });
 
-            $(window).on('resize', draw_robot_canvas);
+
+            // Arrow key navigation. Spacebar to recenter
+            $(window).on('keydown', function (e) {
+                delta_x = 0;
+                delta_y = 0;
+                switch (e.keyCode) {
+                    case 32:
+                        canvas_offset_x = 0;
+                        canvas_offset_y = 0;
+                        break;
+                    case 37:
+                        delta_x = 20;
+                    break;
+                    case 38:
+                        delta_y += 20;
+                    break;
+                    case 39:
+                        delta_x -= 20
+                    break;
+                    case 40:
+                        delta_y -= 20;
+                    break;
+                    default:
+                        return;
+                }
+
+                canvas_offset_x += Math.abs(canvas_offset_x + delta_x) < canvas_bound_x ? delta_x : 0;
+                canvas_offset_y += Math.abs(canvas_offset_y + delta_y) < canvas_bound_y ? delta_y : 0;
+
+                draw_canvas();
+            });
+
+
+
+            scope.$watch('selectedRobot', draw_canvas);
+
+            $(window).on('resize', draw_canvas);
 
             // On page load
-            draw_robot_canvas();
+            draw_canvas();
+
         }
-    }
+    };
 };

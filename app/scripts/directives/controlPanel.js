@@ -7,10 +7,18 @@ module.exports = function () {
         controller: "robotController",
         templateUrl: 'scripts/controlPanel.html',
         link: function (scope, element, attrs, controller) {
-            scope.isPanelVisible = false;
             scope.togglePanel = function () {
                 scope.isPanelVisible = !scope.isPanelVisible;
+                element.removeClass('flash');
             };
+
+            scope.$watch('selectedRobots', function () {
+                if (scope.selectedRobots.length > 1) {
+                    scope.isPanelVisible = true;
+                } else {
+                    element.addClass('flash');
+                }
+            });
         },
     };
 };

@@ -9,13 +9,31 @@ html, body {
     background: #0F1830;
     overflow: hidden;
 }
+
+.instruction-bar {
+    margin-bottom: 10px;
+    height: 50px;
+    background-color: #202024;
+    box-shadow: 0 0 10px #00C4FF;
+    padding: 5px 20px;
+    color: #E6E7E8;
+    text-align: center;
+    z-index: 1000;
+}
+
+.instruction-bar span {
+    margin: 0 10px;
+    white-space: nowrap;
+}
+
 .robot-canvas {
-    background: #0F1830;
+    top: 0;
+    position: absolute;
 }
 .control-panel {
     position: absolute;
     bottom: 0;
-    height: 200px;
+    height: 40px;
     width: 100%;
     z-index: 10;
     transition: height .25s linear;
@@ -27,7 +45,7 @@ html, body {
     margin: 0 auto;
     padding: 0 20px;
     background: #202024;
-    box-shadow: 0 0 5px #00C4FF;
+    box-shadow: 0 0 10px #00C4FF;
     border-bottom: 0;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
@@ -35,14 +53,30 @@ html, body {
     max-width: 800px;
 }
 
+.control-panel.short.flash .panel-wrap {
+    animation-duration: 1s;
+    animation-name: blink;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+}
+
+@keyframes blink {
+    from {
+        box-shadow: 0 0 10px red;
+    }
+    to {
+        box-shadow: 0 0 10px #00C4FF;
+    }
+ }
+
 @media screen and (max-width: 800px) {
     .control-panel .panel-wrap {
         border-radius: 0;
     }
 }
 
-.control-panel.short {
-    height: 40px;
+.control-panel.tall {
+    height: 200px;
 }
 
 .control-panel .panel-header {

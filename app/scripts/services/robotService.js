@@ -7,13 +7,15 @@ module.exports = function($rootScope, $http, $q) {
         if (robots != undefined) return robots.promise;
         var deferred = $q.defer();
         $http({
-            'method' : 'GET',
-            'url': 'http://localhost:3000/api/robots',
+            method: 'GET',
+            url: 'http://localhost:3000/api/robots'
         })
         .success(function (data) {
             var ret = [];
             for (var index in data['robots']) {
-                ret.push(data['robots'][index]);
+                robot_data = data['robots'][index];
+                robot_data["key"] = index;
+                ret.push(robot_data);
             }
             deferred.resolve(ret);
         })
@@ -23,6 +25,32 @@ module.exports = function($rootScope, $http, $q) {
         return (robots = selectedRobots = deferred).promise
     };
 
+    service.updateRobotByIndex = function (key, update_data) {
+        update_data['robot_id'] = key
+        $http({
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            url: 'http://localhost:3000/api/robots',
+            data: update_data
+        });
+
+        var deferred = $q.defer();
+        robots.promise.then(function (res) {
+            for (var i = 0; i < res.length; i++) {
+                if (res[i]['key'] != key) {
+                    continue
+                }
+
+                for (var update_key in update_data) {
+                    res[i][update_key] = update_data[update_key];
+                }
+            }
+            console.log(res);
+            deferred.resolve(res);
+        });
+        robots = deferred;
+    };
+
     service.getSelectedRobots = function () {
         if (selectedRobots != undefined) {
             return selectedRobots.promise;
@@ -30,20 +58,24 @@ module.exports = function($rootScope, $http, $q) {
             return service.getRobots()
         }
     };
-    service.setSelectedRobots = function () {
-        selected = (arguments[0]) ? arguments[0] : robots;
+
+    service.setSelectedRobots = function (selected) {
         var deferred = $q.defer();
+
+        // FIXME: Only call update selected when needed.
         service.getSelectedRobots().then(function (val) {
             if (val != selected) {
                 deferred.resolve(selected);
                 selectedRobots = deferred;
             }
+            if (!selected.length) {
+                selectedRobots = robots;
+            }
         })['finally'](updateSelected);
     };
-    service.selectRobotsByLocation = function (x_cord, y_cord) {
-        service.getRobots().then(function (val) {
-            var distance_threshhold = (arguments[2]) ? arguments[2]: 0;
 
+    service.selectRobotsByLocation = function (x_cord, y_cord, distance_threshhold) {
+        service.getRobots().then(function (val) {
             var selected = [];
             var unselected = val.filter(function (i) {return selected.indexOf(i) < 0;});
             for (var i = 0; i < unselected.length; i++) {

@@ -1783,20 +1783,37 @@ html, body {
   background: #0F1830;
   overflow: hidden; }
 
-/* line 12, stdin */
-.robot-canvas {
-  background: #0F1830; }
+/* line 13, stdin */
+.instruction-bar {
+  margin-bottom: 10px;
+  height: 50px;
+  background-color: #202024;
+  box-shadow: 0 0 10px #00C4FF;
+  padding: 5px 20px;
+  color: #E6E7E8;
+  text-align: center;
+  z-index: 1000; }
 
-/* line 15, stdin */
+/* line 24, stdin */
+.instruction-bar span {
+  margin: 0 10px;
+  white-space: nowrap; }
+
+/* line 29, stdin */
+.robot-canvas {
+  top: 0;
+  position: absolute; }
+
+/* line 33, stdin */
 .control-panel {
   position: absolute;
   bottom: 0;
-  height: 200px;
+  height: 40px;
   width: 100%;
   z-index: 10;
   transition: height .25s linear; }
 
-/* line 23, stdin */
+/* line 41, stdin */
 .control-panel .panel-wrap {
   position: relative;
   box-sizing: border-box;
@@ -1804,23 +1821,36 @@ html, body {
   margin: 0 auto;
   padding: 0 20px;
   background: #202024;
-  box-shadow: 0 0 5px #00C4FF;
+  box-shadow: 0 0 10px #00C4FF;
   border-bottom: 0;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   color: #E6E7E8;
   max-width: 800px; }
 
+/* line 56, stdin */
+.control-panel.short.flash .panel-wrap {
+  animation-duration: 1s;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-direction: normal; }
+
+@keyframes blink {
+  from {
+    box-shadow: 0 0 10px red; }
+  to {
+    box-shadow: 0 0 10px #00C4FF; } }
+
 @media screen and (max-width: 800px) {
-  /* line 39, stdin */
+  /* line 73, stdin */
   .control-panel .panel-wrap {
     border-radius: 0; } }
 
-/* line 44, stdin */
-.control-panel.short {
-  height: 40px; }
+/* line 78, stdin */
+.control-panel.tall {
+  height: 200px; }
 
-/* line 48, stdin */
+/* line 82, stdin */
 .control-panel .panel-header {
   height: 40px;
   box-shadow: 0 5px 5px -5px #00C4FF;
@@ -1828,7 +1858,7 @@ html, body {
   letter-spacing: 1px;
   cursor: pointer; }
 
-/* line 56, stdin */
+/* line 90, stdin */
 .control-panel .panel-toggle {
   background: #202024;
   margin: 10px;
@@ -1839,69 +1869,69 @@ html, body {
   border-radius: 2px;
   padding: 0; }
 
-/* line 67, stdin */
+/* line 101, stdin */
 .control-panel .panel-toggle > i {
   color: #00C4FF;
   font-size: 22px;
   text-align: center; }
 
-/* line 73, stdin */
+/* line 107, stdin */
 .control-panel .panel-slider {
   height: 160px;
   overflow-y: scroll;
   padding: 0; }
 
-/* line 79, stdin */
+/* line 113, stdin */
 .control-panel .panel-slider > div {
   height: 100%;
   width: 100%;
   padding: 10px 20px; }
 
-/* line 85, stdin */
+/* line 119, stdin */
 .control-panel .list-panel table {
   margin: 0;
   width: 100%; }
 
-/* line 90, stdin */
+/* line 124, stdin */
 .control-panel .list-panel tr {
   padding-bottom: 5px;
   font-size: 14px; }
 
-/* line 95, stdin */
+/* line 129, stdin */
 .control-panel .list-panel tr:hover td {
   color: #00C4FF; }
 
-/* line 99, stdin */
+/* line 133, stdin */
 .control-panel .single-panel {
   font-size: 16px; }
 
-/* line 103, stdin */
+/* line 137, stdin */
 .dials, .bars {
   height: 100%;
   padding: 0; }
 
-/* line 108, stdin */
+/* line 142, stdin */
 .dials > div {
   width: 100%;
   margin: 0;
   height: 50%;
   padding-top: 4px; }
 
-/* line 115, stdin */
+/* line 149, stdin */
 .bars > div {
   margin: 0;
   width: 100%;
   height: 25%;
   padding: 0 15px; }
 
-/* line 122, stdin */
+/* line 156, stdin */
 .task select {
   background-color: #202024;
   border-color: #00C4FF;
   outline: none;
   width: 100%; }
 
-/* line 129, stdin */
+/* line 163, stdin */
 .battery .progress {
   border: 1px solid #00C4FF;
   height: 50px;
@@ -1912,7 +1942,7 @@ html, body {
   display: inline-block;
   overflow: visible; }
 
-/* line 140, stdin */
+/* line 174, stdin */
 .battery .progress .battery-bump {
   float: right;
   background-color: #00C4FF;
@@ -1923,18 +1953,18 @@ html, body {
   border-top-right-radius: 1px;
   border-bottom-right-radius: 1px; }
 
-/* line 151, stdin */
+/* line 185, stdin */
 .battery .progress-bar {
   background-color: #00C4FF;
   padding-top: 2px;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px; }
 
-/* line 158, stdin */
+/* line 192, stdin */
 .flux {
   height: 100%; }
 
-/* line 162, stdin */
+/* line 196, stdin */
 .flux .flux-slider-wrap {
   margin-top: 10px;
   background-color: #202024;
@@ -1943,12 +1973,12 @@ html, body {
   border-radius: 4px;
   padding-right: 22px; }
 
-/* line 171, stdin */
+/* line 205, stdin */
 .flux .flux-slider {
   background-color: #202024;
   border: 0; }
 
-/* line 176, stdin */
+/* line 210, stdin */
 .flux .flux-slider .ui-slider-handle {
   outline: none;
   border: 0;
@@ -1960,7 +1990,7 @@ html, body {
   margin-left: 1px;
   margin-top: 1px; }
 
-/* line 188, stdin */
+/* line 222, stdin */
 .risk .progress {
   height: 20px;
   width: 90%;
@@ -1969,23 +1999,23 @@ html, body {
   background-color: #202024;
   padding: 1px; }
 
-/* line 197, stdin */
+/* line 231, stdin */
 .risk .progress-bar {
   background-color: #00C4FF;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px; }
 
-/* line 203, stdin */
+/* line 237, stdin */
 .bars .progress {
   border: 1px solid #00C4FF;
   background-color: #202024;
   padding: 1px; }
 
-/* line 209, stdin */
+/* line 243, stdin */
 .bars .progress-bar {
   background-color: #00C4FF; }
 
-/* line 213, stdin */
+/* line 247, stdin */
 .bars .progress-bar:first-child {
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
@@ -1993,18 +2023,18 @@ html, body {
   color: rgba(230, 231, 232, 0);
   transition: width .3s linear, background-color .3s linear, color 0s linear 0s, border-radius 0s linear 0s; }
 
-/* line 221, stdin */
+/* line 255, stdin */
 .bars .progress-bar:first-child div {
   width: 100%;
   display: table;
   table-layout: fixed; }
 
-/* line 227, stdin */
+/* line 261, stdin */
 .bars .progress .progress-bar:not(:first-child) {
   transition: width 0s linear;
   transition-delay: .3s; }
 
-/* line 232, stdin */
+/* line 266, stdin */
 .bars .progress:hover .progress-bar:first-child {
   transition: width .3s linear, background-color .3s linear, color 0s linear .3s, border-radius 0s linear .3s;
   border-radius: 2px;
@@ -2012,21 +2042,21 @@ html, body {
   background-color: rgba(0, 196, 255, 0);
   color: #e6e7e8; }
 
-/* line 240, stdin */
+/* line 274, stdin */
 .bars .progress:hover .progress-bar:not(:first-child) {
   background-color: #202024;
   width: 0 !important;
   transition: 0s;
   transition-delay: 0s; }
 
-/* line 247, stdin */
+/* line 281, stdin */
 .bars .progress i {
   font-size: 12px;
   font-style: normal;
   display: table-cell;
   text-align: center; }
 
-/* line 254, stdin */
+/* line 288, stdin */
 .bars .progress i.fa {
   padding-top: 1px;
   font-size: 15px; }
