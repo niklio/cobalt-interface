@@ -30,7 +30,7 @@ module.exports = function($rootScope, $http, $q) {
         $http({
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            url: 'http://localhost:3000/api/robots',
+            url: '/api/robots',
             data: update_data
         });
 
