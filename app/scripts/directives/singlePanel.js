@@ -30,7 +30,6 @@ module.exports = function ($rootScope) {
             function Battery() {
                 this.el = $('#battery-bar');
                 this.set = function (val) {
-                    console.log(val)
                     this.el.css('width', val + '%');
                 };
             };
