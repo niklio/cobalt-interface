@@ -27,8 +27,8 @@ def run_sim(data):
     t0 = data["t0"]
     t1 = time.time()
 
-    # max timestep of 2 seconds
-    delta = min(t1 - t0, 2)
+    # max timestep of 3 seconds
+    delta = min(t1 - t0, 3)
     data["t0"] = t1
 
     print "looping"

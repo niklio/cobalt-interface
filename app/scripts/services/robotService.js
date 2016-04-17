@@ -3,54 +3,6 @@ module.exports = function($rootScope, $http, $q) {
     var service = {};
     var robots, selectedRobots;
 
-    service.getRobots = function () {
-        if (robots != undefined) return robots.promise;
-        var deferred = $q.defer();
-        $http({
-            method: 'GET',
-            url: '/api/robots'
-        })
-        .success(function (data) {
-            var ret = [];
-            for (var index in data['robots']) {
-                robot_data = data['robots'][index];
-                robot_data["key"] = index;
-                ret.push(robot_data);
-            }
-            deferred.resolve(ret);
-        })
-        .error(function (data, status) {
-            deferred.reject("Error in robotController.getRobot")
-        })['finally'](updateSelected);
-        return (robots = selectedRobots = deferred).promise
-    };
-
-    service.updateRobotByIndex = function (key, update_data) {
-        update_data['robot_id'] = key
-        $http({
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            url: '/api/robots',
-            data: update_data
-        });
-
-        var deferred = $q.defer();
-        robots.promise.then(function (res) {
-            for (var i = 0; i < res.length; i++) {
-                if (res[i]['key'] != key) {
-                    continue
-                }
-
-                for (var update_key in update_data) {
-                    res[i][update_key] = update_data[update_key];
-                }
-            }
-            console.log(res);
-            deferred.resolve(res);
-        });
-        robots = deferred;
-    };
-
     service.getSelectedRobots = function () {
         if (selectedRobots != undefined) {
             return selectedRobots.promise;
@@ -73,6 +25,84 @@ module.exports = function($rootScope, $http, $q) {
             }
         })['finally'](updateSelected);
     };
+
+    service.cacheRobots = function () {
+
+        var selectedRobotKeys = [];
+        if (selectedRobots) {
+            selectedRobots.promise
+            .then(function (res) {
+                for (var i = 0; i < res.length; i++) {
+                    var robot = res[i];
+                    selectedRobotKeys.push(robot['key']);
+                }
+            });
+        }
+
+        var deferred = $q.defer();
+        var selectedRobotsDeferred = $q.defer();
+        $http({
+            method: 'GET',
+            url: '/api/robots'
+        })
+        .success(function (data) {
+            var robots = [];
+            var selectedRobots = [];
+            for (var index in data['robots']) {
+                robot_data = data['robots'][index];
+                robot_data["key"] = index;
+
+                if (selectedRobotKeys.indexOf(index) != -1) {
+                    selectedRobots.push(robot_data);
+                }
+
+                robots.push(robot_data);
+            }
+            deferred.resolve(robots);
+            service.setSelectedRobots(selectedRobots);
+        })
+        .error(function (data, status) {
+            deferred.reject("Error in robotController.cacheRobot");
+            selectedRobotsDeferred.reject("Error in robotController.cacheRobot")
+        })['finally'](updateSelected);
+
+
+        return (robots = deferred).promise
+    }
+
+    service.getRobots = function () {
+        if (robots != undefined) {
+            return robots.promise;
+        } else {
+            return service.cacheRobots();
+        }
+    };
+
+    service.updateRobotByIndex = function (key, update_data) {
+        update_data['robot_id'] = key
+        $http({
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            url: '/api/robots',
+            data: update_data
+        });
+
+        var deferred = $q.defer();
+        robots.promise.then(function (res) {
+            for (var i = 0; i < res.length; i++) {
+                if (res[i]['key'] != key) {
+                    continue
+                }
+
+                for (var update_key in update_data) {
+                    res[i][update_key] = update_data[update_key];
+                }
+            }
+            deferred.resolve(res);
+        });
+        robots = deferred;
+    };
+
 
     service.selectRobotsByLocation = function (x_cord, y_cord, distance_threshhold) {
         service.getRobots().then(function (val) {

@@ -30,7 +30,8 @@ module.exports = function ($rootScope) {
             function Battery() {
                 this.el = $('#battery-bar');
                 this.set = function (val) {
-                    this.el.width(val + '%');
+                    console.log(val)
+                    this.el.css('width', val + '%');
                 };
             };
 
@@ -38,7 +39,7 @@ module.exports = function ($rootScope) {
                 this.el = $('#risk-bar');
                 this.set = function (val) {
                     val_norm = val * 10
-                    this.el.width(val_norm + '%');
+                    this.el.css('width', val_norm + '%');
                 };
             };
 
@@ -46,7 +47,7 @@ module.exports = function ($rootScope) {
                 this.el = $('#cell-strength-bar');
                 this.set = function (val) {
                     val_norm = (val + 70) * (10 / 3);
-                    this.el.width((val_norm / 2) + '%');
+                    this.el.css('width', (val_norm / 2) + '%');
                 };
             };
 
@@ -56,7 +57,7 @@ module.exports = function ($rootScope) {
                     val = val > 0 ? 0 : val;
                     val = val < -100 ? -100 : val;
                     val_norm = val + 100;
-                    this.el.width((val_norm / 2) + '%');
+                    this.el.css('width', (val_norm / 2) + '%');
                 };
             };
 
@@ -64,7 +65,7 @@ module.exports = function ($rootScope) {
                 this.el = $('#' + id);
                 this.set = function (val) {
                     val_norm = (val - 20) * (4 / 5);
-                    this.el.width((val_norm / 2) + '%');
+                    this.el.css('width', (val_norm / 2) + '%');
                 };
             };
 
@@ -72,7 +73,7 @@ module.exports = function ($rootScope) {
                 this.el = $('#cpu-load-bar');
                 this.set = function (val) {
                     val_norm = val * 100;
-                    this.el.width((val_norm / 2) + '%');
+                    this.el.css('width', (val_norm / 2) + '%');
                 };
             };
 
@@ -80,15 +81,15 @@ module.exports = function ($rootScope) {
                 this.el = $('#gpu-load-bar');
                 this.set = function (val) {
                     val_norm = val * 200;
-                    this.el.width((val_norm / 2) + '%');
+                    this.el.css('width', (val_norm / 2) + '%');
                 }
             }
 
             function Ram() {
                 this.el = $('#ram-bar');
                 this.set = function (val) {
-                    val_norm = (val - 1) * (50 / 3);
-                    this.el.width((val_norm / 2) + '%');
+                    val_norm = (val - 1) * (25 / 2);
+                    this.el.css('width', (val_norm / 2) + '%');
                 };
             };
 
@@ -97,7 +98,7 @@ module.exports = function ($rootScope) {
                 this.set = function (val) {
                     val = val > 125 ? 125 : val;
                     val_norm = val - 25;
-                    this.el.width((val_norm / 2) + '%');
+                    this.el.css('width', (val_norm / 2) + '%');
                 };
             };
 

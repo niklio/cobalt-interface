@@ -1,16 +1,23 @@
 module.exports = function ($scope, $rootScope, $q, robotService) {
 
-    // Returns PROMISE, not Array
-    this.getRobots = function () {
+    var resolveRobots = function (promise) {
         var deferred = $q.defer();
-        robotService.getRobots()
-        .then(function (res) {
+        promise.then(function (res) {
             $scope.robots = res;
             deferred.resolve(res);
         }, function (reason) {
             deferred.reject(reason);
         });
         return deferred.promise;
+    }
+
+    this.cacheRobots = function () {
+        return resolveRobots(robotService.cacheRobots());
+    }
+
+    // Returns PROMISE, not Array
+    this.getRobots = function () {
+        return resolveRobots(robotService.getRobots());
     };
 
     this.selectRobots = function(robot) {

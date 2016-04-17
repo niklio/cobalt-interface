@@ -99,7 +99,11 @@ module.exports = function () {
                 }
             };
 
-            var draw_canvas = function () {
+            var draw_canvas = function (robot_promise) {
+                if (robot_promise == undefined) {
+                    console.log("`draw_canvas` function requires argument `robot_promise`")
+                    return
+                }
                 parent_width = element.parent().width();
                 parent_height = element.parent().height();
 
@@ -107,7 +111,7 @@ module.exports = function () {
                 ctx.canvas.height = parent_height;
 
                 ctx.transform(canvas_zoom_x, 0, 0, canvas_zoom_y, parent_width / 2 + canvas_offset_x, parent_height / 2 + canvas_offset_y);
-                controller.getRobots().then(draw_robots)
+                robot_promise.then(draw_robots)
             };
 
 
@@ -131,7 +135,7 @@ module.exports = function () {
                             "goal_y": clickY
                         });
 
-                        draw_canvas();
+                        draw_canvas(controller.getRobots());
                         break;
                 }
             });
@@ -165,17 +169,26 @@ module.exports = function () {
                 canvas_offset_x += Math.abs(canvas_offset_x + delta_x) < canvas_bound_x ? delta_x : 0;
                 canvas_offset_y += Math.abs(canvas_offset_y + delta_y) < canvas_bound_y ? delta_y : 0;
 
-                draw_canvas();
+                draw_canvas(controller.getRobots());
             });
 
 
+            setInterval(function () {
+                draw_canvas(controller.cacheRobots());
+            }, 3000);
 
-            scope.$watch('selectedRobot', draw_canvas);
+            // Redraw canvas when a robot is selected
+            scope.$watch('selectedRobot', function () {
+                draw_canvas(controller.getRobots());
+            });
 
-            $(window).on('resize', draw_canvas);
+            // Redraw canvas on page resize
+            $(window).on('resize', function () {
+                draw_canvas(controller.getRobots());
+            });
 
             // On page load
-            draw_canvas();
+            draw_canvas(controller.getRobots());
 
         }
     };
