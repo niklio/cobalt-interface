@@ -118,4 +118,5 @@ def robot_api():
     return Response(json.dumps(robot_data), mimetype='application/json', headers={'Cache-Control': 'no-cache', 'Access-Control-Allow-Origin': '*'})
 
 if __name__ == '__main__':
-    app.run(port=int(os.environ.get("PORT",3000)))
+    print "THIS IS THE PORT %s" % int(os.environ.get("PORT", 3000))
+    app.run(port=int(os.environ.get("PORT", 3000)))
