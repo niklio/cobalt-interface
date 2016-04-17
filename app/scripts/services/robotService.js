@@ -8,7 +8,7 @@ module.exports = function($rootScope, $http, $q) {
         var deferred = $q.defer();
         $http({
             method: 'GET',
-            url: 'http://localhost:3000/api/robots'
+            url: '/api/robots'
         })
         .success(function (data) {
             var ret = [];
